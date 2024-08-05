@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\Event;
 use App\Models\eventbackup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class BookingController extends Controller
@@ -14,14 +15,14 @@ class BookingController extends Controller
     public function index()
     {
         $currentDateTime = Carbon::now();
-    
+
         // Filter bookings to include only future events
         $bookings = Event::where(function ($query) use ($currentDateTime) {
             $query->where('date', '>', $currentDateTime->toDateString())
-                  ->orWhere(function ($query) use ($currentDateTime) {
-                      $query->where('date', '=', $currentDateTime->toDateString())
-                            ->where('finish', '>', $currentDateTime->toTimeString());
-                  });
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('date', '=', $currentDateTime->toDateString())
+                        ->where('finish', '>', $currentDateTime->toTimeString());
+                });
         })->get()->groupBy('nama_rooms');
 
         foreach ($bookings as $room => $roomBookings) {
@@ -32,7 +33,7 @@ class BookingController extends Controller
                 $booking->duration = $duration;
             }
         }
-    
+
         return view('booking.index', compact('bookings'));
     }
 
@@ -47,7 +48,7 @@ class BookingController extends Controller
 
         return response()->json(['message' => 'Status updated successfully.']);
     }
-    
+
 
     public function create()
     {
@@ -67,6 +68,9 @@ class BookingController extends Controller
             'date' => 'required|date',
             'start' => 'required|date_format:H:i',
             'finish' => 'required|date_format:H:i|after:start',
+            'catatan' => 'required|string',
+            'presensi' => 'required|string',
+
         ], [
             'start.required' => 'Kolom mulai wajib diisi.',
             'start.date_format' => 'Format kolom waktu tidak sesuai.',
@@ -91,7 +95,7 @@ class BookingController extends Controller
         Event::create($request->all());
         eventbackup::create($request->all());
 
-        return redirect()->route('booking.create')->with('success', 'Ruang berhasil dibooking');
+        return redirect()->route('booking.index')->with('success', 'Ruang berhasil dibooking');
     }
 
     public function edit(Event $booking)
@@ -112,6 +116,9 @@ class BookingController extends Controller
             'date' => 'required|date',
             'start' => 'required|date_format:H:i',
             'finish' => 'required|date_format:H:i|after:start',
+            'catatan' => 'required|string',
+            'presensi' => 'required|string',
+
         ], [
             'start.required' => 'Kolom mulai wajib diisi.',
             'start.date_format' => 'Format kolom waktu tidak sesuai.',
@@ -128,16 +135,16 @@ class BookingController extends Controller
             'date.required' => 'Kolom tanggal wajib diisi.',
             'date.date' => 'Format kolom tanggal tidak valid.',
         ]);
-    
+
         if (!Event::isRoomAvailable($request->id_rooms, $request->start, $request->finish, $request->date, $booking->id)) {
             return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
         }
-    
+
         $booking->update($request->all());
-    
+
         return redirect()->route('booking.index')->with('success', 'Jadwal Berhasil Diperbarui');
     }
-    
+
 
     public function destroy(Event $booking)
     {
@@ -192,28 +199,48 @@ class BookingController extends Controller
 
     public function updateroom(Request $request, $id)
     {
-        $request->validate([
-            'nama_ruang' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'deskripsi' => 'required|string',
-            'status' => 'required|string',
-        ]);
+        // Log the start of the update process
+        Log::info("Updating room with ID: $id");
 
-        $room = Room::findOrFail($id);
+        try {
+            // Validate the request data
+            $request->validate([
+                'nama_ruang' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'deskripsi' => 'required|string',
+            ]);
 
-        $room->nama_ruang = $request->nama_ruang;
-        $room->deskripsi = $request->deskripsi;
-        $room->status = $request->status;
+            // Find the room by ID
+            $room = Room::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $room->image = $imagePath;
+            // Update the room details
+            $room->nama_ruang = $request->nama_ruang;
+            $room->deskripsi = $request->deskripsi;
+            $room->status = 'Tersedia';
+
+            // Handle the image upload if present
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $room->image = $imagePath;
+            }
+
+            // Save the updated room
+            $room->save();
+
+            // Log success message
+            Log::info("Room with ID: $id updated successfully.");
+
+            return redirect()->route('rooms.show', $room->id)->with('success', 'Room updated successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error with the exception message
+            Log::error("Error updating room with ID: $id", ['error' => $e->getMessage()]);
+
+            // Optionally, return an error response to the user
+            return redirect()->route('rooms.index')->with('error', 'An error occurred while updating the room.');
         }
-
-        $room->save();
-
-        return redirect()->route('rooms.show', $room->id)->with('success', 'Room updated successfully.');
     }
+
 
     public function destroyRoom(Room $room)
     {

@@ -19,7 +19,7 @@
                 <a href="{{ route('booking.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
                     Tambah Jadwal
                 </a>
-            </div>            
+            </div>
             @foreach ($bookings as $room => $roomBookings)
                 <div class="p-4 relative overflow-x-auto shadow-md sm:rounded-lg mb-8">
                     <h3 class="uppercase text-lg font-semibold text-gray-800 mb-4">{{ $room }}</h3>
@@ -54,7 +54,10 @@
                                     Durasi
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
-                                    Status
+                                    Status Kegiatan
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                    Status Pelaksanaan
                                 </th>
                                 @if (Auth::user()->role == 'admin')
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
@@ -93,15 +96,37 @@
                                     <td class="px-6 py-4 text-sm text-gray-900 ">
                                         {{ $booking->duration }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 ">
+                                    <td class="px-6 py-4 text-sm text-gray-900">
                                         @if (Auth::user()->role == 'admin')
                                             <select class="status-select" data-id="{{ $booking->id }}">
+                                                <option value="Menunggu Persetujuan" {{ $booking->status == 'Menunggu Persetujuan' ? 'selected' : '' }}>Menunggu Persetujuan</option>
                                                 <option value="Disetujui" {{ $booking->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
                                                 <option value="Tidak Disetujui" {{ $booking->status == 'Tidak Disetujui' ? 'selected' : '' }}>Tidak Disetujui</option>
                                             </select>
                                         @elseif (Auth::user()->role == 'user')
-                                            {{ $booking->status }}
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                @if ($booking->status == 'Menunggu Persetujuan')
+                                                    bg-yellow-100 text-yellow-800
+                                                @elseif ($booking->status == 'Disetujui')
+                                                    bg-green-100 text-green-800
+                                                @elseif ($booking->status == 'Tidak Disetujui')
+                                                    bg-red-100 text-red-800
+                                                @endif
+                                            ">
+                                                {{ $booking->status }}
+                                            </span>
                                         @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                            @if (\Carbon\Carbon::now()->between(\Carbon\Carbon::parse($booking->date . ' ' . $booking->start), \Carbon\Carbon::parse($booking->date . ' ' . $booking->finish)))
+                                                bg-blue-100 text-blue-800">Mulai
+                                            @elseif (\Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($booking->date . ' ' . $booking->finish)))
+                                                bg-green-100 text-green-800">Selesai
+                                            @else
+                                                bg-yellow-100 text-yellow-800">Belum Dimulai
+                                            @endif
+                                        </span>
                                     </td>
                                     @if (Auth::user()->role == 'admin')
                                     <td class="px-6 py-4 text-right text-sm font-medium">
@@ -116,7 +141,7 @@
                                     </td>
                                     @endif
                                 </tr>
-                            @endforeach                        
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

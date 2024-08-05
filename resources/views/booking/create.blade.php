@@ -63,6 +63,16 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                                 placeholder="Jumlah Peserta" required />
                         </div>
+                        <div>
+                            <label for="catatan" class="block mb-2 text-sm font-medium text-gray-900 ">Catatan</label>
+                            <textarea name="catatan" id="catatan" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label for="presensi" class="block mb-2 text-sm font-medium text-gray-900">Link Presensi</label>
+                            <input type="text" id="presensi" name="presensi"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                placeholder="Link.." required />
+                        </div>
                         <input type="hidden" id="nama_rooms" name="nama_rooms" value="" />
                     </div>
                     <button type="submit"
