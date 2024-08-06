@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('booking.edit');
     Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('booking.update');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+    Route::delete('admin/bookings/{booking}', [BookingController::class, 'destroyadmin'])->name('booking.destroyadmin');
+
 
     //akses spesial admin bagian Ruangan
     Route::get('/rooms/{room}/edit', [BookingController::class, 'editroom'])->name('rooms.edit');
@@ -29,6 +31,10 @@ Route::middleware('auth')->group(function () {
 
     //akses admin untuk update status jadwal
     Route::patch('/booking/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('booking.updateStatus');
+
+    Route::get('/callback', function () {
+        // Handle the OAuth callback logic here
+    })->name('callback');
 
 });
     //akses umum jadwal

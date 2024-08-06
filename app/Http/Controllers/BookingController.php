@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\eventbackup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BookingController extends Controller
@@ -66,9 +67,8 @@ class BookingController extends Controller
             'nama_rooms' => 'required|string|max:255',
             'asalbidang' => 'required|string|max:255',
             'date' => 'required|date',
-            'start' => 'required|date_format:H:i',
-            'finish' => 'required|date_format:H:i|after:start',
-            'catatan' => 'required|string',
+            'start' => 'required|',
+            'finish' => 'required||after:start',
             'presensi' => 'required|string',
 
         ], [
@@ -92,10 +92,16 @@ class BookingController extends Controller
             return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
         }
 
+        // Merge user data into the request
+        $request->merge([
+            'nama' => Auth::user()->name,
+            'id_user' => Auth::user()->id,
+        ]);
+
         Event::create($request->all());
         eventbackup::create($request->all());
 
-        return redirect()->route('booking.index')->with('success', 'Ruang berhasil dibooking');
+        return redirect()->route('dashboard')->with('success', 'Ruang berhasil dibooking');
     }
 
     public function edit(Event $booking)
@@ -114,9 +120,8 @@ class BookingController extends Controller
             'nama_rooms' => 'required|string|max:255',
             'asalbidang' => 'required|string|max:255',
             'date' => 'required|date',
-            'start' => 'required|date_format:H:i',
-            'finish' => 'required|date_format:H:i|after:start',
-            'catatan' => 'required|string',
+            'start' => 'required|',
+            'finish' => 'required||after:start',
             'presensi' => 'required|string',
 
         ], [
@@ -140,13 +145,24 @@ class BookingController extends Controller
             return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
         }
 
+        $request->merge([
+            'nama' => Auth::user()->name,
+            'id_user' => Auth::user()->id,
+        ]);
+
         $booking->update($request->all());
 
-        return redirect()->route('booking.index')->with('success', 'Jadwal Berhasil Diperbarui');
+        return redirect()->route('dashboard')->with('success', 'Jadwal Berhasil Diperbarui');
     }
 
 
     public function destroy(Event $booking)
+    {
+        $booking->delete();
+        return redirect()->route('dashboard')->with('success', 'Jadwal Berhasil Dibatalkan');
+    }
+
+    public function destroyadmin(Event $booking)
     {
         $booking->delete();
         return redirect()->route('booking.index')->with('success', 'Jadwal Berhasil Dihapus');
@@ -231,7 +247,6 @@ class BookingController extends Controller
             Log::info("Room with ID: $id updated successfully.");
 
             return redirect()->route('rooms.show', $room->id)->with('success', 'Room updated successfully.');
-
         } catch (\Exception $e) {
             // Log the error with the exception message
             Log::error("Error updating room with ID: $id", ['error' => $e->getMessage()]);

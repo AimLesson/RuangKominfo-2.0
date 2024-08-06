@@ -16,9 +16,6 @@
                     Download PDF
                 </button>
                 @endif
-                <a href="{{ route('booking.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
-                    Tambah Jadwal
-                </a>
             </div>
             @foreach ($bookings as $room => $roomBookings)
                 <div class="p-4 relative overflow-x-auto shadow-md sm:rounded-lg mb-8">
@@ -28,6 +25,9 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-acara">
                                     Acara
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    QR Code Presensi
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Jumlah Peserta
@@ -71,6 +71,9 @@
                                 <tr>
                                     <td class="px-6 py-4 text-sm text-gray-900  max-w-acara">
                                         {{ $booking->acara }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                        <div id="qrcode-{{ $booking->id }}"></div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900 ">
                                         {{ $booking->peserta }}
@@ -131,8 +134,8 @@
                                     @if (Auth::user()->role == 'admin')
                                     <td class="px-6 py-4 text-right text-sm font-medium">
                                         <div class="flex">
-                                            <a href="{{ route('booking.edit', $booking) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            <form action="{{ route('booking.destroy', $booking) }}" method="POST" style="display:inline;">
+                                            {{-- <a href="{{ route('booking.edit', $booking) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a> --}}
+                                            <form action="{{ route('booking.destroyadmin', $booking) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Delete</button>
@@ -155,6 +158,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -292,6 +296,31 @@
                 doc.save('bookings.pdf');
             });
 
+            // Generate QR codes with custom image
+            var bookings = @json($bookings);
+            for (var room in bookings) {
+                if (bookings.hasOwnProperty(room)) {
+                    bookings[room].forEach(function(booking) {
+                        var qrcodeContainer = document.getElementById('qrcode-' + booking.id);
+                        var qrCode = new QRCode(qrcodeContainer, {
+                            text: booking.presensi,
+                            width: 128,
+                            height: 128
+                        });
+
+                        // Create a custom image element
+                        var img = new Image();
+                        img.src = 'logo.png'; // Replace with your image path
+                        img.onload = function() {
+                            var canvas = qrcodeContainer.querySelector('canvas');
+                            var context = canvas.getContext('2d');
+                            var size = 128;
+                            var imgSize = size * 0.2; // 20% of the QR code size
+                            context.drawImage(img, (size - imgSize) / 2, (size - imgSize) / 2, imgSize, imgSize);
+                        };
+                    });
+                }
+            }
         });
     </script>
 </x-app-layout>

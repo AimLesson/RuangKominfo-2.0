@@ -21,6 +21,10 @@ class eventbackup extends Model
         'start',
         'finish',
         'peserta',
+        'catatan',
+        'presensi',
+        'id_user',
+
     ];
 
     public function room()
@@ -41,5 +45,5 @@ class eventbackup extends Model
                               });
                     })->exists();
     }
-    
+
 }

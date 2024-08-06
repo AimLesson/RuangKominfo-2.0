@@ -19,6 +19,9 @@ class Event extends Model
         'start',
         'finish',
         'peserta',
+        'catatan',
+        'presensi',
+        'id_user',
     ];
 
     public function room()
@@ -38,13 +41,13 @@ class Event extends Model
                                         ->where('finish', '>', $endTime);
                               });
                     });
-    
+
         if ($excludeEventId) {
             $query->where('id', '<>', $excludeEventId);
         }
-    
+
         return !$query->exists();
     }
-    
-    
+
+
 }
