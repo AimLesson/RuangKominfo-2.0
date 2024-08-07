@@ -10,8 +10,8 @@
             {{-- History User --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
                 @php
-                    $user = Auth::user();
-                    $jadwal = \App\Models\Event::where('id_user', $user->id)
+                    $jadwal = \App\Models\Event::where('id_rooms', $room->id)
+                        ->where('status', 'Disetujui')
                         ->orderBy('date', 'asc')
                         ->get();
                 @endphp
@@ -136,11 +136,11 @@
         </div>
     </div>
 
-    <script>
-        // Set initial value
-        document.getElementById('nama_rooms').value = document.getElementById('id_rooms').options[document.getElementById(
-            'id_rooms').selectedIndex].text;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+
+    <script>
         @if (session('success'))
             toastr.success("{{ session('success') }}");
         @endif
