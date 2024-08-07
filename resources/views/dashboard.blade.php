@@ -70,10 +70,12 @@
                 </div>
             </div>
 
+            @if (Auth::user()->role == 'admin')
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
                 <h3 class="uppercase text-lg font-semibold text-gray-800">Selamat Datang {{ Auth::user()->name }}</h3>
             </div>
 
+            {{-- Dashboard Admin Card --}}
             @php
                 // Get the current date
                 $today = \Carbon\Carbon::today();
@@ -88,7 +90,6 @@
                 // List of colors
                 $colors = ['bg-red-200', 'bg-blue-200', 'bg-yellow-200', 'bg-green-200', 'bg-purple-200'];
             @endphp
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
                 <div class="flex gap-4">
                     @foreach ($cards as $index => $card)
@@ -118,8 +119,10 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
+            {{-- History User --}}
+            {{-- <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
                 @php
                     $user = Auth::user();
                     $jadwal = \App\Models\Event::where('id_user', $user->id)
@@ -243,7 +246,7 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
                     Tambah Jadwal
                 </a>
-            </div>
+            </div> --}}
 
 
             {{-- Monthly Events Table --}}
@@ -387,6 +390,29 @@
         </div>
     </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        document.getElementById('id_rooms').addEventListener('change', function() {
+            document.getElementById('nama_rooms').value = this.options[this.selectedIndex].text;
+        });
+
+        // Set initial value
+        document.getElementById('nama_rooms').value = document.getElementById('id_rooms').options[document.getElementById(
+            'id_rooms').selectedIndex].text;
+
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
+
     <script>
         function showQRCode(code) {
             document.getElementById('qrCodeModal').classList.remove('hidden');

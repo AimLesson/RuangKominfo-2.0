@@ -101,7 +101,7 @@ class BookingController extends Controller
         Event::create($request->all());
         eventbackup::create($request->all());
 
-        return redirect()->route('dashboard')->with('success', 'Ruang berhasil dibooking');
+        return redirect()->route('history')->with('success', 'Ruang berhasil dibooking');
     }
 
     public function edit(Event $booking)
@@ -152,7 +152,7 @@ class BookingController extends Controller
 
         $booking->update($request->all());
 
-        return redirect()->route('dashboard')->with('success', 'Jadwal Berhasil Diperbarui');
+        return redirect()->route('history')->with('success', 'Jadwal Berhasil Diperbarui');
     }
 
 
