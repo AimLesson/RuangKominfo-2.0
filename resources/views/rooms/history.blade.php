@@ -10,8 +10,8 @@
             {{-- History User --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4">
                 @php
-                    $jadwal = \App\Models\Event::where('id_rooms', $room->id)
-                        ->where('status', 'Disetujui')
+                    $user = Auth::user();
+                    $jadwal = \App\Models\Event::where('id_user', $user->id)
                         ->orderBy('date', 'asc')
                         ->get();
                 @endphp
