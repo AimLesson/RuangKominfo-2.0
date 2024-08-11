@@ -92,10 +92,12 @@ class BookingController extends Controller
             return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
         }
 
-        // Merge user data into the request
+        $status='Menunggu Konfirmasi';
+
         $request->merge([
             'nama' => Auth::user()->name,
             'id_user' => Auth::user()->id,
+            'status' => $status,
         ]);
 
         Event::create($request->all());
@@ -145,9 +147,12 @@ class BookingController extends Controller
             return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
         }
 
+        $status='Menunggu Konfirmasi';
+
         $request->merge([
             'nama' => Auth::user()->name,
             'id_user' => Auth::user()->id,
+            'status' => $status,
         ]);
 
         $booking->update($request->all());
