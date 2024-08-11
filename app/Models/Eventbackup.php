@@ -24,7 +24,8 @@ class eventbackup extends Model
         'catatan',
         'presensi',
         'id_user',
-
+        'rejection_note',
+        'status'
     ];
 
     public function room()

@@ -277,6 +277,8 @@
                     },
                     error: function(xhr) {
                         toastr.error('Failed to update status.');
+                        console.log('Error updating status:', xhr.responseText);
+                console.log('Booking ID:', bookingId);
                     }
                 });
             }
