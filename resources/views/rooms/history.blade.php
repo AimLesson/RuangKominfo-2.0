@@ -51,7 +51,10 @@
                                     Status</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Catatan Penolakan</th> <!-- New Column for Rejection Note -->
+                                    Catatan</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Alasan Penolakan</th> <!-- New Column for Rejection Note -->
                                 <th scope="col"
                                     class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Action</th>
@@ -92,7 +95,10 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                        @if($booking->status == 'Tidak Disetujui')
+                                        {{ $booking->catatan }}</td>
+
+                                    <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                        @if ($booking->status == 'Tidak Disetujui')
                                             {{ $booking->rejection_note }}
                                         @else
                                             -

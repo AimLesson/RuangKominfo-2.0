@@ -106,7 +106,7 @@
 
             {{-- Monthly Events Table --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4 p-4 border">
-                <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
+                <form method="GET" action="/" class="mb-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div>
                             <label for="month" class="block text-sm font-medium text-gray-700">Select Month</label>
