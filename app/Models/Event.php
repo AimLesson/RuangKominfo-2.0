@@ -22,6 +22,8 @@ class Event extends Model
         'catatan',
         'presensi',
         'id_user',
+        'rejection_note',
+        'status'
     ];
 
     public function room()
@@ -29,25 +31,30 @@ class Event extends Model
         return $this->belongsTo(Room::class, 'id_rooms');
     }
 
-    public static function isRoomAvailable($roomId, $startTime, $endTime, $date, $excludeEventId = null)
+    public static function isRoomAvailable($roomId, $startTime, $endTime, $date)
     {
-        $query = self::where('id_rooms', $roomId)
-                    ->whereDate('date', $date)
-                    ->where(function($query) use ($startTime, $endTime) {
-                        $query->whereBetween('start', [$startTime, $endTime])
-                              ->orWhereBetween('finish', [$startTime, $endTime])
-                              ->orWhere(function($query) use ($startTime, $endTime) {
-                                  $query->where('start', '<', $startTime)
-                                        ->where('finish', '>', $endTime);
-                              });
-                    });
+        // Fetch events that clash with the requested time in the given room
+        $clashingEvents = self::where('id_rooms', $roomId)
+                            ->where('date', $date)
+                            ->where(function ($query) use ($startTime, $endTime) {
+                                $query->whereBetween('start', [$startTime, $endTime])
+                                      ->orWhereBetween('finish', [$startTime, $endTime])
+                                      ->orWhere(function ($query) use ($startTime, $endTime) {
+                                          $query->where('start', '<', $startTime)
+                                                ->where('finish', '>', $endTime);
+                                      });
+                            })
+                            ->get();
 
-        if ($excludeEventId) {
-            $query->where('id', '<>', $excludeEventId);
+        // If there are clashing events, return them
+        if ($clashingEvents->isNotEmpty()) {
+            return $clashingEvents;
         }
 
-        return !$query->exists();
+        // If no clashing events, return null or false
+        return null;
     }
+
 
 
 }

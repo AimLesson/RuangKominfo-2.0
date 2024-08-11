@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
     //akses admin untuk update status jadwal
     Route::patch('/booking/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('booking.updateStatus');
 
+    Route::patch('/booking/{id}/reject', [BookingController::class, 'rejectBooking']);
+
+
     Route::get('/callback', function () {
         // Handle the OAuth callback logic here
     })->name('callback');

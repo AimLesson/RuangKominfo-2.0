@@ -67,10 +67,9 @@ class BookingController extends Controller
             'nama_rooms' => 'required|string|max:255',
             'asalbidang' => 'required|string|max:255',
             'date' => 'required|date',
-            'start' => 'required|',
-            'finish' => 'required||after:start',
+            'start' => 'required',
+            'finish' => 'required|after:start',
             'presensi' => 'required|string',
-
         ], [
             'start.required' => 'Kolom mulai wajib diisi.',
             'start.date_format' => 'Format kolom waktu tidak sesuai.',
@@ -88,11 +87,16 @@ class BookingController extends Controller
             'date.date' => 'Format kolom tanggal tidak valid.',
         ]);
 
-        if (!Event::isRoomAvailable($request->id_rooms, $request->start, $request->finish, $request->date)) {
-            return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
+        $clashingEvents = Event::isRoomAvailable($request->id_rooms, $request->start, $request->finish, $request->date);
+
+        if ($clashingEvents) {
+            return back()->withErrors([
+                'msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan.',
+                'clashingEvents' => $clashingEvents->pluck('acara')->toArray()
+            ]);
         }
 
-        $status='Menunggu Konfirmasi';
+        $status = 'Menunggu Konfirmasi';
 
         $request->merge([
             'nama' => Auth::user()->name,
@@ -105,6 +109,7 @@ class BookingController extends Controller
 
         return redirect()->route('history')->with('success', 'Ruang berhasil dibooking');
     }
+
 
     public function edit(Event $booking)
     {
@@ -143,11 +148,17 @@ class BookingController extends Controller
             'date.date' => 'Format kolom tanggal tidak valid.',
         ]);
 
-        if (!Event::isRoomAvailable($request->id_rooms, $request->start, $request->finish, $request->date, $booking->id)) {
-            return back()->withErrors(['msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan']);
+        $clashingEvents = Event::isRoomAvailable($request->id_rooms, $request->start, $request->finish, $request->date);
+
+        if ($clashingEvents) {
+            return back()->withErrors([
+                'msg' => 'Ruangan tidak tersedia di jadwal yang ditentukan.',
+                'clashingEvents' => $clashingEvents->pluck('acara')->toArray()
+            ]);
         }
 
-        $status='Menunggu Konfirmasi';
+
+        $status = 'Menunggu Konfirmasi';
 
         $request->merge([
             'nama' => Auth::user()->name,
@@ -159,6 +170,17 @@ class BookingController extends Controller
 
         return redirect()->route('history')->with('success', 'Jadwal Berhasil Diperbarui');
     }
+
+    public function rejectBooking(Request $request, $id)
+    {
+        $booking = Event::findOrFail($id);
+        $booking->status = 'Tidak Disetujui';
+        $booking->rejection_note = $request->input('rejection_note');
+        $booking->save();
+
+        return response()->json(['message' => 'Booking rejected with note']);
+    }
+
 
 
     public function destroy(Event $booking)

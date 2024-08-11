@@ -9,12 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex mb-2">
                 @if (Auth::user()->role == 'admin')
-                <button id="downloadExcel" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
-                    Download Excel
-                </button>
-                <button id="downloadPDF" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
-                    Download PDF
-                </button>
+                    <button id="downloadExcel"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
+                        Download Excel
+                    </button>
+                    <button id="downloadPDF"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
+                        Download PDF
+                    </button>
                 @endif
             </div>
             @foreach ($bookings as $room => $roomBookings)
@@ -23,46 +25,59 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-acara">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-acara">
                                     Acara
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     QR Code Presensi
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Jumlah Peserta
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Ruang
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Penanggung Jawab
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Pengguna
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Tanggal
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Mulai
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Selesai
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Durasi
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Status Kegiatan
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                                     Status Pelaksanaan
                                 </th>
                                 @if (Auth::user()->role == 'admin')
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
-                                    Action
-                                </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
+                                        Action
+                                    </th>
                                 @endif
                             </tr>
                         </thead>
@@ -102,54 +117,87 @@
                                     <td class="px-6 py-4 text-sm text-gray-900">
                                         @if (Auth::user()->role == 'admin')
                                             <select class="status-select" data-id="{{ $booking->id }}">
-                                                <option value="Menunggu Persetujuan" {{ $booking->status == 'Menunggu Persetujuan' ? 'selected' : '' }}>Menunggu Persetujuan</option>
-                                                <option value="Disetujui" {{ $booking->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
-                                                <option value="Tidak Disetujui" {{ $booking->status == 'Tidak Disetujui' ? 'selected' : '' }}>Tidak Disetujui</option>
+                                                <option value="Menunggu Persetujuan"
+                                                    {{ $booking->status == 'Menunggu Persetujuan' ? 'selected' : '' }}>
+                                                    Menunggu Persetujuan</option>
+                                                <option value="Disetujui"
+                                                    {{ $booking->status == 'Disetujui' ? 'selected' : '' }}>Disetujui
+                                                </option>
+                                                <option value="Tidak Disetujui"
+                                                    {{ $booking->status == 'Tidak Disetujui' ? 'selected' : '' }}>Tidak
+                                                    Disetujui</option>
                                             </select>
                                         @elseif (Auth::user()->role == 'user')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                @if ($booking->status == 'Menunggu Persetujuan')
-                                                    bg-yellow-100 text-yellow-800
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                @if ($booking->status == 'Menunggu Persetujuan') bg-yellow-100 text-yellow-800
                                                 @elseif ($booking->status == 'Disetujui')
                                                     bg-green-100 text-green-800
                                                 @elseif ($booking->status == 'Tidak Disetujui')
-                                                    bg-red-100 text-red-800
-                                                @endif
+                                                    bg-red-100 text-red-800 @endif
                                             ">
                                                 {{ $booking->status }}
                                             </span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                            @if (\Carbon\Carbon::now()->between(\Carbon\Carbon::parse($booking->date . ' ' . $booking->start), \Carbon\Carbon::parse($booking->date . ' ' . $booking->finish)))
-                                                bg-blue-100 text-blue-800">Mulai
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                            @if (
+                                                \Carbon\Carbon::now()->between(
+                                                    \Carbon\Carbon::parse($booking->date . ' ' . $booking->start),
+                                                    \Carbon\Carbon::parse($booking->date . ' ' . $booking->finish))) bg-blue-100 text-blue-800">Mulai
                                             @elseif (\Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($booking->date . ' ' . $booking->finish)))
                                                 bg-green-100 text-green-800">Selesai
                                             @else
-                                                bg-yellow-100 text-yellow-800">Belum Dimulai
-                                            @endif
+                                                bg-yellow-100 text-yellow-800">Belum Dimulai @endif
                                         </span>
                                     </td>
                                     @if (Auth::user()->role == 'admin')
-                                    <td class="px-6 py-4 text-right text-sm font-medium">
-                                        <div class="flex">
-                                            {{-- <a href="{{ route('booking.edit', $booking) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a> --}}
-                                            <form action="{{ route('booking.destroyadmin', $booking) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Delete</button>
-                                            </form>
-                                        </div>
+<td class="px-6
+                                            py-4 text-right text-sm font-medium">
+                                            <div class="flex">
+                                                {{-- <a href="{{ route('booking.edit', $booking) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a> --}}
+                                                <form action="{{ route('booking.destroyadmin', $booking) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                                                </form>
+                                            </div>
                                     </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            @endif
+                            </tr>
+                            <!-- Modal for Adding Rejection Note -->
+                            <div id="rejectionModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+                                <div class="flex items-center justify-center min-h-screen">
+                                    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                                        <h2 class="text-lg font-semibold mb-4">Alasan Penolakan</h2>
+                                        <form id="rejectionForm">
+                                            <input type="hidden" id="bookingId">
+                                            <div class="mb-4">
+                                                <label for="rejectionNote"
+                                                    class="block text-sm font-medium text-gray-700">Catatan</label>
+                                                <textarea id="rejectionNote" name="rejectionNote" rows="4"
+                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                                            </div>
+                                            <div class="flex justify-end">
+                                                <button type="button" id="closeModal"
+                                                    class="mr-2 px-4 py-2 bg-gray-500 text-white rounded-lg">Cancel</button>
+                                                <button type="submit"
+                                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
             @endforeach
+            </tbody>
+            </table>
         </div>
+        @endforeach
+    </div>
     </div>
 
     <!-- Ensure these scripts are loaded before your custom script -->
@@ -176,12 +224,53 @@
                 var bookingId = $(this).data('id');
                 var newStatus = $(this).val();
 
+                if (newStatus === 'Tidak Disetujui') {
+                    $('#bookingId').val(bookingId);
+                    $('#rejectionModal').removeClass('hidden');
+                } else {
+                    updateBookingStatus(bookingId, newStatus);
+                }
+            });
+
+            // Close modal
+            $('#closeModal').on('click', function() {
+                $('#rejectionModal').addClass('hidden');
+            });
+
+            // Handle form submission
+            $('#rejectionForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var bookingId = $('#bookingId').val();
+                var rejectionNote = $('#rejectionNote').val();
+
+                $.ajax({
+                    url: '/booking/' + bookingId + '/reject',
+                    method: 'PATCH',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 'Tidak Disetujui',
+                        rejection_note: rejectionNote
+                    },
+                    success: function(response) {
+                        toastr.success('Status updated successfully.');
+                        $('#rejectionModal').addClass('hidden');
+                        // Optionally, you can reload the page or update the UI
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        toastr.error('Failed to update status.');
+                    }
+                });
+            });
+
+            function updateBookingStatus(bookingId, status) {
                 $.ajax({
                     url: '/booking/' + bookingId + '/update-status',
                     method: 'PATCH',
                     data: {
                         _token: '{{ csrf_token() }}',
-                        status: newStatus
+                        status: status
                     },
                     success: function(response) {
                         toastr.success('Status updated successfully.');
@@ -190,7 +279,7 @@
                         toastr.error('Failed to update status.');
                     }
                 });
-            });
+            }
 
             $('#downloadExcel').on('click', function() {
                 var bookings = @json($bookings);
@@ -198,7 +287,11 @@
 
                 for (var room in bookings) {
                     if (bookings.hasOwnProperty(room)) {
-                        var ws_data = [['Acara', 'Jumlah Peserta', 'Ruang', 'Penanggung Jawab', 'Pengguna', 'Tanggal', 'Mulai', 'Selesai', 'Durasi']];
+                        var ws_data = [
+                            ['Acara', 'Jumlah Peserta', 'Ruang', 'Penanggung Jawab', 'Pengguna',
+                                'Tanggal', 'Mulai', 'Selesai', 'Durasi'
+                            ]
+                        ];
 
                         bookings[room].forEach(function(booking) {
                             ws_data.push([
@@ -223,11 +316,18 @@
             });
 
             document.getElementById('downloadPDF').addEventListener('click', function() {
-                const { jsPDF } = window.jspdf;
+                const {
+                    jsPDF
+                } = window.jspdf;
 
                 var doc = new jsPDF();
 
-                var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+                var margin = {
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20
+                };
                 var pageWidth = doc.internal.pageSize.width - margin.left - margin.right;
                 var pageHeight = doc.internal.pageSize.height - margin.top - margin.bottom;
                 var startY = margin.top;
@@ -259,28 +359,60 @@
                         });
 
                         doc.autoTable({
-                            head: [['Acara', 'Jumlah Peserta', 'Ruang', 'Penanggung Jawab', 'Pengguna', 'Tanggal', 'Mulai', 'Selesai', 'Durasi']],
+                            head: [
+                                ['Acara', 'Jumlah Peserta', 'Ruang', 'Penanggung Jawab',
+                                    'Pengguna', 'Tanggal', 'Mulai', 'Selesai', 'Durasi'
+                                ]
+                            ],
                             body: rows,
                             startY: startY + 10,
-                            margin: { left: margin.left, right: margin.right },
+                            margin: {
+                                left: margin.left,
+                                right: margin.right
+                            },
                             tableWidth: pageWidth,
-                            styles: { overflow: 'linebreak' },
-                            headStyles: { fillColor: [220, 220, 220] },
+                            styles: {
+                                overflow: 'linebreak'
+                            },
+                            headStyles: {
+                                fillColor: [220, 220, 220]
+                            },
                             columnStyles: {
-                                0: { cellWidth: 'auto', maxCellWidth: 40 },
-                                1: { cellWidth: 'auto' },
-                                2: { cellWidth: 'auto' },
-                                3: { cellWidth: 'auto' },
-                                4: { cellWidth: 'auto' },
-                                5: { cellWidth: 'auto' },
-                                6: { cellWidth: 'auto' },
-                                7: { cellWidth: 'auto' },
-                                8: { cellWidth: 'auto' },
+                                0: {
+                                    cellWidth: 'auto',
+                                    maxCellWidth: 40
+                                },
+                                1: {
+                                    cellWidth: 'auto'
+                                },
+                                2: {
+                                    cellWidth: 'auto'
+                                },
+                                3: {
+                                    cellWidth: 'auto'
+                                },
+                                4: {
+                                    cellWidth: 'auto'
+                                },
+                                5: {
+                                    cellWidth: 'auto'
+                                },
+                                6: {
+                                    cellWidth: 'auto'
+                                },
+                                7: {
+                                    cellWidth: 'auto'
+                                },
+                                8: {
+                                    cellWidth: 'auto'
+                                },
                             },
                             didDrawPage: function(data) {
                                 var pageCount = doc.internal.getNumberOfPages();
                                 doc.setFontSize(10);
-                                doc.text('Page ' + String(data.pageNumber) + ' of ' + String(pageCount), margin.left, pageHeight + margin.top + 10);
+                                doc.text('Page ' + String(data.pageNumber) + ' of ' + String(
+                                        pageCount), margin.left, pageHeight + margin.top +
+                                    10);
                             }
                         });
 
@@ -316,7 +448,8 @@
                             var context = canvas.getContext('2d');
                             var size = 128;
                             var imgSize = size * 0.2; // 20% of the QR code size
-                            context.drawImage(img, (size - imgSize) / 2, (size - imgSize) / 2, imgSize, imgSize);
+                            context.drawImage(img, (size - imgSize) / 2, (size - imgSize) / 2, imgSize,
+                                imgSize);
                         };
                     });
                 }

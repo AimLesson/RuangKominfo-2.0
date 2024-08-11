@@ -51,6 +51,9 @@
                                     Status</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Catatan Penolakan</th> <!-- New Column for Rejection Note -->
+                                <th scope="col"
+                                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Action</th>
                             </tr>
                         </thead>
@@ -88,6 +91,13 @@
                                             {{ $booking->status }}
                                         </span>
                                     </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                        @if($booking->status == 'Tidak Disetujui')
+                                            {{ $booking->rejection_note }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                         <div class="flex">
                                             <a href="{{ route('booking.edit', $booking) }}"
@@ -102,28 +112,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <!-- Modal structure -->
-                                <div id="qrCodeModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
-                                    <div class="flex items-center justify-center min-h-screen">
-                                        <div class="relative bg-white rounded-lg shadow-lg w-3/4 max-w-md">
-                                            <div class="p-4 flex justify-between items-center border-b">
-                                                <h3 class="text-lg font-semibold text-gray-900">Presensi Kegiatan
-                                                    {{ $booking->acara }}</h3>
-                                                <button class="text-gray-400 hover:text-gray-900"
-                                                    onclick="closeModal()">
-                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="p-4 flex justify-center items-center">
-                                                <div id="modal-qrcode"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             @endforeach
                         </tbody>
                     </table>
@@ -138,7 +126,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 
     <script>
         @if (session('success'))
