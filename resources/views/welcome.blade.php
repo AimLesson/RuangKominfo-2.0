@@ -37,20 +37,19 @@
         </div>
     </div>
 </nav>
-
+<!-- Hero Section -->
+<section class="bg-gray-100 m-5">
+    <div class="container mx-auto flex flex-col md:flex-row items-center rounded-lg">
+        <!-- Left Side - Picture -->
+        <div class="w-full px-4 mb-8 md:mb-0 rounded-lg">
+            <img src="hero.png" alt="About Us Image" class="w-full h-auto">
+        </div>
+    </div>
+</section>
 <x-welcome-layout>
     {{-- Content --}}
     <div>
         <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-            <!-- Hero Section -->
-            <section class="bg-gray-100 mb-5">
-                <div class="container mx-auto flex flex-col md:flex-row items-center rounded-lg">
-                    <!-- Left Side - Picture -->
-                    <div class="w-full px-4 mb-8 md:mb-0 rounded-lg">
-                        <img src="hero.png" alt="About Us Image" class="w-full h-auto">
-                    </div>
-                </div>
-            </section>
             {{-- Carousel Parts --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
                 @php

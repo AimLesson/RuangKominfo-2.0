@@ -30,8 +30,7 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        <div class="p-4">
-            <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg">
+            <div class="p-2">
                 <!-- Page Heading -->
                 @if (isset($header))
                     <header class="bg-white shadow">
@@ -46,8 +45,7 @@
                     {{ $slot }}
                 </main>
             </div>
-        </div>
-    </div>
+=    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
