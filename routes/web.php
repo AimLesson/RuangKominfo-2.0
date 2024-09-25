@@ -55,4 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/rooms', [BookingController::class, 'storeroom'])->name('rooms.store');
     Route::get('/rooms/{room}', [BookingController::class, 'show'])->name('rooms.show');
 
+    Route::get('/offline', function () {
+        return view('modules/laravelpwa/offline');
+    });
+
 require __DIR__.'/auth.php';
